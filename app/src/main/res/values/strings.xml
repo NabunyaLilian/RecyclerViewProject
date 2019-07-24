@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PhotoViewer</string>
+    <string name="helllo">Helllo</string>
+    <string name="icon">Icon</string>
+</resources>
