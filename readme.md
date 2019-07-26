@@ -23,11 +23,11 @@ These are the things you need to install the software and how to install them
 Follow these simple steps to get you started;
 - Open Android studio
 - `git clone https://github.com/NabunyaLilian/RecyclerViewProject.git`
-- `git checkout recyclerview-project-v3`
+- `git checkout recyclerview-project-v4`
 - Run App
 
 ## Built With
 - Android/Java
 
 ## Versioning
-This is the Second version
+This is the fourth version

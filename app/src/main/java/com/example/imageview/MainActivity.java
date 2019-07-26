@@ -3,8 +3,12 @@ package com.example.imageview;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -16,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager ;
 
     private MyAdapter mAdapter;
+    SwipeRefreshLayout swipeRefreshLayout;
+    ProgressDialog progressDialog;
+
 
     ArrayList<String> images = new ArrayList<>();
     ArrayList<String> image_names = new ArrayList<>();
@@ -27,14 +34,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        showProgressDialog();
 //        load images
         initialImages();
 
 //        Find the recyclerView
+        swipeRefreshLayout = findViewById(R.id.swiperefresh);
+        swipeToRefresh();
+
+        int orientation = this.getResources().getConfiguration().orientation;
+        if(orientation == Configuration.ORIENTATION_PORTRAIT){
+            gridsize(2);
+        }else{
+            gridsize(3);
+        }
+
+
         recyclerView = findViewById(R.id.image_list);
         recyclerView.setHasFixedSize(true);
 
-        layoutManager = new GridLayoutManager(this, 2, recyclerView.VERTICAL, false);
+
         recyclerView.setLayoutManager(layoutManager);
 
 //        set the adapter
@@ -73,5 +92,39 @@ public class MainActivity extends AppCompatActivity {
         image_names.add("Nick");
         images.add("https://iapp.org/media/headshots/0011a00000DlO9KAAV.png");
         image_names.add("Greg");
+    }
+
+    private void swipeToRefresh(){
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    public void showProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading..."); // Setting Message
+        progressDialog.setTitle("Photoviewer images"); // Setting Title
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+        progressDialog.show(); // Display Progress Dialog
+        progressDialog.setCancelable(false);
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(10000);
+                } catch (Exception e) {
+                    String TAG = null;
+                    Log.d(TAG, "run: something went wrong");
+                }
+                progressDialog.dismiss();
+            }
+        }).start();
+    }
+
+    private void gridsize(int size){
+        layoutManager = new GridLayoutManager(this, size, recyclerView.VERTICAL, false);
+
     }
 }
